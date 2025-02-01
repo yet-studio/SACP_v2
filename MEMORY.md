@@ -15,6 +15,19 @@
    - Performance-driven
    - Perfect documentation
 
+## Pre-Action Checklist [CRITICAL]
+1. Git Status Check:
+   - ALWAYS check git status before new actions
+   - NO new features with pending commits
+   - NO task switches with uncommitted files
+   - Clean working directory required
+
+2. Status Resolution:
+   - Review all pending changes
+   - Commit or stash changes
+   - Push if necessary
+   - THEN proceed with new action
+
 ## Strategic Validation Protocol [CRITICAL]
 1. Documentation First:
    - NO action without documented strategy
