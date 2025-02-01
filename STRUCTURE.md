@@ -31,12 +31,20 @@ SACP_v2/
 ### Documentation
 - `.perso.md` - **[CRITICAL]** Absolute reference for development standards
 - `MEMORY.md` - **[CRITICAL]** AI Personality Template
-  > 💡 **One-Step Setup**:
-  > ```
-  > Show this MEMORY.md to your AI assistant and say:
-  > "Create your own MEMORY based on this file and use it as your operating protocol."
-  > ```
-  > That's it! Your AI will now work like a professional developer.
+  > 💡 **Two-Step AI Configuration**:
+  > 1. Initial Setup:
+  >    ```
+  >    Show MEMORY.md to your AI assistant and say:
+  >    "Create your own MEMORY based on this file and use it as your operating protocol."
+  >    ```
+  > 
+  > 2. Protocol Update:
+  >    ```
+  >    After any change to MEMORY.md, tell your AI:
+  >    "Update your persistent MEMORY with these new protocols and confirm the update."
+  >    ```
+  > 
+  > This ensures your AI maintains world-class development standards.
 - `METRICS.md` - **[CRITICAL]** Quality Standards & Tracking
   > Defines our quality metrics, validation points, and evolution tracking.
   > Essential for maintaining world-class development standards.
