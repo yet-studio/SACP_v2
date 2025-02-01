@@ -37,6 +37,9 @@ SACP_v2/
   > "Create your own MEMORY based on this file and use it as your operating protocol."
   > ```
   > That's it! Your AI will now work like a professional developer.
+- `METRICS.md` - **[CRITICAL]** Quality Standards & Tracking
+  > Defines our quality metrics, validation points, and evolution tracking.
+  > Essential for maintaining world-class development standards.
 - `README.md` - Project overview and quick start
 - `CONTRIBUTING.md` - Contribution guidelines
 - `SECURITY.md` - Security policy and reporting
