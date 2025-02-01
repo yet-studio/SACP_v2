@@ -50,10 +50,10 @@
    - Success criteria
 
 4. Validation Checkpoints:
-   - Strategy documented? ✓
-   - Approach validated? ✓
-   - Metrics defined? ✓
-   - Risks assessed? ✓
+   - Strategy documented? 
+   - Approach validated? 
+   - Metrics defined? 
+   - Risks assessed? 
    - THEN proceed
 
 ## Feature Development Protocol
@@ -253,3 +253,163 @@
 - [ ] Implementation clean
 - [ ] Review thorough
 - [ ] Integration smooth
+
+## Core Principles
+- Documentation before action
+- Tests before code
+- Non-negotiable quality
+- Security by default
+
+## Pre-Action Checklist [CRITICAL]
+1. Git Status Check:
+   - ALWAYS check git status before new actions
+   - NO new features with pending commits
+   - NO task switches with uncommitted files
+   - Clean working directory required
+
+2. Status Resolution:
+   - Review all pending changes
+   - Commit or stash changes
+   - Push if necessary
+   - THEN proceed with new action
+
+## Strategy Validation [CRITICAL]
+1. Strategy Document Required:
+   - Must be in docs/strategy/
+   - Must follow naming: YYYY-MM-DD-feature-name.md
+   - Must include all sections
+
+2. Required Sections:
+   ```yaml
+   strategy:
+     purpose:
+       - Problem definition
+       - Importance justification
+       - Expected impact
+     
+     approach:
+       - Solution method
+       - Alternative considerations
+       - Implementation steps
+     
+     impact:
+       - Quality implications
+       - Security considerations
+       - Performance effects
+     
+     success:
+       - Validation points
+       - Success metrics
+       - Expected outcomes
+   ```
+
+3. Validation Process:
+   ```yaml
+   validation:
+     steps:
+       1. Document creation
+       2. Peer review
+       3. Strategy approval
+       4. Implementation start
+     
+     checklist:
+       - [ ] All sections complete
+       - [ ] Impact analyzed
+       - [ ] Success criteria defined
+       - [ ] Dependencies identified
+   ```
+
+## Quality Standards [CRITICAL]
+1. Code Quality:
+   ```yaml
+   quality:
+     tests:
+       - Unit tests required
+       - Integration tests needed
+       - Security tests mandatory
+       - Performance tests essential
+     
+     standards:
+       - Clean architecture
+       - SOLID principles
+       - DRY implementation
+       - KISS approach
+   ```
+
+2. Documentation Quality:
+   ```yaml
+   documentation:
+     required:
+       - Purpose explanation
+       - Usage examples
+       - API documentation
+       - Error handling
+     
+     standards:
+       - Clear and concise
+       - Up to date
+       - Example driven
+       - Properly formatted
+   ```
+
+## Security Protocol [CRITICAL]
+1. Security First:
+   ```yaml
+   security:
+     principles:
+       - Security by design
+       - Zero trust model
+       - Least privilege
+       - Defense in depth
+     
+     requirements:
+       - Input validation
+       - Output sanitization
+       - Access control
+       - Data protection
+   ```
+
+2. Validation Points:
+   ```yaml
+   validation:
+     security:
+       - Vulnerability scanning
+       - Penetration testing
+       - Code review
+       - Configuration audit
+   ```
+
+## Integration Requirements
+1. System Integration:
+   ```yaml
+   integration:
+     requirements:
+       - API contracts
+       - Error handling
+       - Performance SLAs
+       - Security standards
+     
+     validation:
+       - Contract tests
+       - Integration tests
+       - Performance tests
+       - Security audits
+   ```
+
+2. Documentation Integration:
+   ```yaml
+   documentation:
+     integration:
+       - API documentation
+       - Integration guides
+       - Error catalogs
+       - Security guides
+   ```
+
+## Success Criteria
+- [ ] Strategy validated
+- [ ] Quality standards met
+- [ ] Security verified
+- [ ] Integration complete
+- [ ] Documentation updated
+- [ ] Tests passing

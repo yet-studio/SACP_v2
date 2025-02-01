@@ -1,78 +1,78 @@
 # Strategy Document: VALIDATION.md Structure
 
 ## 1. Purpose
-- Établir un système de validation robuste et explicite
-- Garantir la qualité à chaque étape du développement
-- Fournir des points de contrôle clairs et actionnables
-- Assurer la traçabilité des validations
+- Establish a robust and explicit validation system
+- Ensure quality at every stage of development
+- Provide clear and actionable checkpoints
+- Ensure traceability of validations
 
 ## 2. Approach
-### Structure du fichier
+### File Structure
 ```yaml
 validation:
   principles:
-    - Documentation avant action
-    - Tests avant code
-    - Qualité non négociable
-    - Sécurité par défaut
+    - Documentation before action
+    - Tests before code
+    - Non-negotiable quality
+    - Security by default
   
   checkpoints:
     strategy:
       required: true
       template: docs/strategy/YYYY-MM-DD-feature-name.md
       points:
-        - Purpose documenté
-        - Approach validé
-        - Impact analysé
-        - Critères définis
+        - Purpose documented
+        - Approach validated
+        - Impact analyzed
+        - Success criteria defined
     
     code:
       required: true
       points:
-        - Tests écrits
-        - Standards respectés
-        - Sécurité vérifiée
-        - Performance évaluée
+        - Tests written
+        - Standards respected
+        - Security verified
+        - Performance evaluated
     
     documentation:
       required: true
       points:
-        - API documentée
-        - Exemples fournis
-        - Changements notés
-        - Impacts décrits
+        - API documented
+        - Examples provided
+        - Changes noted
+        - Impacts described
 
   process:
-    1. Validation de stratégie
-    2. Validation technique
-    3. Validation de qualité
-    4. Validation de sécurité
-    5. Validation finale
+    1. Strategy validation
+    2. Technical validation
+    3. Quality validation
+    4. Security validation
+    5. Final validation
 ```
 
 ## 3. Impact Analysis
-### Qualité
-- Documentation standardisée des validations
-- Points de contrôle explicites
-- Process reproductible
-- Qualité mesurable
+### Quality
+- Standardized validation documentation
+- Explicit checkpoints
+- Reproducible process
+- Measurable quality
 
-### Sécurité
-- Validation sécurité obligatoire
-- Points de contrôle sécurité
-- Traçabilité des validations
-- Audit possible
+### Security
+- Mandatory security validation
+- Security checkpoints
+- Traceability of validations
+- Auditing possible
 
 ### Performance
-- Process de validation clair
-- Templates prêts à l'emploi
-- Validation rapide
-- Pas de temps perdu
+- Clear validation process
+- Ready-to-use templates
+- Rapid validation
+- No time wasted
 
 ## 4. Success Criteria
-- [ ] Structure claire et logique
-- [ ] Points de validation explicites
-- [ ] Templates pratiques
-- [ ] Process actionnable
-- [ ] Intégration avec METRICS.md
-- [ ] Compatible avec EVOLUTION.md
+- [ ] Clear and logical structure
+- [ ] Explicit validation points
+- [ ] Practical templates
+- [ ] Actionable process
+- [ ] Integration with METRICS.md
+- [ ] Compatible with EVOLUTION.md

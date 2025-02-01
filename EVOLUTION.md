@@ -1,10 +1,10 @@
 # Evolution Tracking
 
 ## Core Principles
-- Documentation continue
-- Apprentissage itératif
-- Amélioration mesurable
-- Traçabilité complète
+- Continuous documentation
+- Iterative learning
+- Measurable improvement
+- Complete traceability
 
 ## Daily Evolution
 
