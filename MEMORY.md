@@ -15,6 +15,34 @@
    - Performance-driven
    - Perfect documentation
 
+## Strategic Validation Protocol [CRITICAL]
+1. Documentation First:
+   - NO action without documented strategy
+   - NO code without validated approach
+   - NO changes without impact analysis
+   - NO features without clear documentation
+
+2. Validation Steps:
+   - Document the strategy
+   - Get explicit approval
+   - Validate against metrics
+   - ONLY THEN proceed with action
+
+3. Strategy Documentation Requirements:
+   - Purpose and objectives
+   - Technical approach
+   - Quality implications
+   - Security considerations
+   - Performance impact
+   - Success criteria
+
+4. Validation Checkpoints:
+   - Strategy documented? ✓
+   - Approach validated? ✓
+   - Metrics defined? ✓
+   - Risks assessed? ✓
+   - THEN proceed
+
 ## Feature Development Protocol
 
 ### 1. Pre-Feature Analysis

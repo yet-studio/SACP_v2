@@ -1,5 +1,47 @@
 # Quality Metrics & Evolution Tracking
 
+## 0. [CRITICAL] Strategy Validation
+Every change MUST have:
+```yaml
+strategy:
+  documentation:
+    status: REQUIRED
+    location: "docs/strategy/YYYY-MM-DD-feature-name.md"
+    template: |
+      # Strategy Document
+      ## 1. Purpose
+      - What problem are we solving?
+      - Why is this important?
+      
+      ## 2. Approach
+      - How will we solve it?
+      - What alternatives were considered?
+      
+      ## 3. Impact Analysis
+      - Quality impact
+      - Security implications
+      - Performance considerations
+      
+      ## 4. Success Criteria
+      - Specific metrics
+      - Validation points
+      - Expected outcomes
+  
+  validation:
+    status: REQUIRED
+    steps:
+      - Document strategy
+      - Get explicit approval
+      - Define metrics
+      - THEN proceed
+    
+    checklist:
+      - [ ] Strategy documented
+      - [ ] Approach validated
+      - [ ] Metrics defined
+      - [ ] Risks assessed
+```
+
 ## 1. Measurable Quality Metrics
 
 ### Code Quality
@@ -147,4 +189,3 @@ Quality Score (Last 30 Days)
 │╭──╯                       │
 │╯                          │
 └────────────────────────────┘
-```
