@@ -167,6 +167,30 @@
    - Future considerations
    - Optimization points
 
+## Language Protocol
+
+### English Only
+- All project content MUST be in English
+- This includes:
+  - Documentation
+  - Code comments
+  - Commit messages
+  - Pull requests
+  - Issue descriptions
+  - Code variables and functions
+
+### Quality Standards
+- Use clear, professional English
+- Maintain consistent terminology
+- Follow technical writing best practices
+- Keep language simple and precise
+
+### Validation Points
+- Check all new content is in English
+- Verify terminology consistency
+- Ensure technical accuracy
+- Review language clarity
+
 ## Quality Metrics
 
 ### 1. Code Quality
