@@ -29,22 +29,7 @@ SACP_v2/
 - `.gitignore` - Git ignore patterns
 
 ### Documentation
-- `.perso.md` - **[CRITICAL]** Absolute reference for development standards
-- `MEMORY.md` - **[CRITICAL]** AI Personality Template
-  > 💡 **Two-Step AI Configuration**:
-  > 1. Initial Setup:
-  >    ```
-  >    Show MEMORY.md to your AI assistant and say:
-  >    "Create your own MEMORY based on this file and use it as your operating protocol."
-  >    ```
-  > 
-  > 2. Protocol Update:
-  >    ```
-  >    After any change to MEMORY.md, tell your AI:
-  >    "Update your persistent MEMORY with these new protocols and confirm the update."
-  >    ```
-  > 
-  > This ensures your AI maintains world-class development standards.
+- `MEMORY.md` - **[CRITICAL]** Absolute reference for development standards
 - `METRICS.md` - **[CRITICAL]** Quality Standards & Tracking
   > Defines our quality metrics, validation points, and evolution tracking.
   > Essential for maintaining world-class development standards.
@@ -136,3 +121,99 @@ Every file and directory must:
 - Follow naming conventions
 - Include appropriate tests
 - Meet quality standards
+
+## Core Files
+```yaml
+root:
+  - MEMORY.md      # Core protocols and rules
+  - METRICS.md     # Quality metrics and validation
+  - STRUCTURE.md   # Project organization
+  - VALIDATION.md  # Validation process
+  - EVOLUTION.md   # Progress tracking
+  - ROADMAP.md     # Development plan
+```
+
+## Documentation Structure
+```yaml
+docs:
+  strategy:
+    - YYYY-MM-DD-feature-name.md  # Strategy documents
+  
+  api:
+    - endpoints.md    # API documentation
+    - security.md     # Security protocols
+    - validation.md   # Validation rules
+  
+  implementation:
+    - architecture.md # System design
+    - patterns.md     # Design patterns
+    - protocols.md    # Implementation rules
+```
+
+## Code Organization
+```yaml
+src:
+  core:
+    - validation/    # Validation system
+    - security/      # Security layer
+    - metrics/       # Metrics collection
+  
+  api:
+    - endpoints/     # API implementations
+    - middleware/    # Request processing
+    - handlers/      # Request handlers
+  
+  utils:
+    - validation/    # Validation helpers
+    - security/      # Security utilities
+    - metrics/       # Metrics utilities
+```
+
+## Test Structure
+```yaml
+tests:
+  unit:
+    - validation/    # Validation tests
+    - security/      # Security tests
+    - metrics/       # Metrics tests
+  
+  integration:
+    - api/          # API tests
+    - system/       # System tests
+    - end-to-end/   # E2E tests
+  
+  performance:
+    - load/         # Load tests
+    - stress/       # Stress tests
+    - benchmark/    # Performance benchmarks
+```
+
+## Configuration
+```yaml
+config:
+  - validation.yaml  # Validation rules
+  - security.yaml   # Security settings
+  - metrics.yaml    # Metrics config
+```
+
+## AI Configuration
+```yaml
+ai:
+  1. Memory Update:
+     - Update MEMORY.md
+     - Commit changes
+     - Push updates
+  
+  2. Configuration:
+     - Load MEMORY.md
+     - Apply rules
+     - Verify behavior
+```
+
+## Success Criteria
+- [ ] Structure clear
+- [ ] Organization logical
+- [ ] Documentation complete
+- [ ] Tests organized
+- [ ] Configuration clean
+- [ ] AI setup proper
