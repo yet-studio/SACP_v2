@@ -125,11 +125,14 @@ Every file and directory must:
 ## Core Files
 ```yaml
 root:
+  - README.md      # Project overview and setup
+  - LICENSE        # MIT License
   - MEMORY.md      # Core protocols and rules
   - METRICS.md     # Quality metrics and validation
   - STRUCTURE.md   # Project organization
   - VALIDATION.md  # Validation process
   - EVOLUTION.md   # Progress tracking
+  - CONTEXT.md     # Strategic analysis
   - ROADMAP.md     # Development plan
 ```
 
@@ -138,6 +141,10 @@ root:
 docs:
   strategy:
     - YYYY-MM-DD-feature-name.md  # Strategy documents
+    current:
+      - 2025-02-01-documentation-foundation.md
+      - 2025-02-01-evolution-structure.md
+      - 2025-02-01-validation-structure.md
   
   api:
     - endpoints.md    # API documentation
@@ -196,24 +203,29 @@ config:
   - metrics.yaml    # Metrics config
 ```
 
-## AI Configuration
+## Language Protocol
 ```yaml
-ai:
-  1. Memory Update:
-     - Update MEMORY.md
-     - Commit changes
-     - Push updates
+language:
+  standard: English
+  applies_to:
+    - Documentation
+    - Code comments
+    - Commit messages
+    - Pull requests
+    - Issue descriptions
+    - Variables and functions
   
-  2. Configuration:
-     - Load MEMORY.md
-     - Apply rules
-     - Verify behavior
+  quality:
+    - Clear and professional
+    - Consistent terminology
+    - Technical accuracy
+    - Simple and precise
 ```
 
 ## Success Criteria
-- [ ] Structure clear
-- [ ] Organization logical
+- [ ] Structure clear and logical
+- [ ] Organization efficient
 - [ ] Documentation complete
 - [ ] Tests organized
 - [ ] Configuration clean
-- [ ] AI setup proper
+- [ ] Language protocol followed
