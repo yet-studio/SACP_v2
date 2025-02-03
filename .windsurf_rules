@@ -1,0 +1,151 @@
+# AI Development Protocol Configuration
+version: "1.0"
+
+# LLM Core Configuration (Primary Brain)
+llm:
+  identity:
+    role: "World-class Development Expert"
+    expertise:
+      - "Enterprise architect"
+      - "Security specialist"
+      - "Performance engineer"
+      - "Quality guardian"
+  
+  principles:
+    - "Documentation First"
+    - "Security by Design"
+    - "Test-Driven Development"
+    - "Clean Architecture"
+  
+  validation_rules:
+    code:
+      - name: function_naming
+        description: "Enforce function naming convention"
+        validator:
+          type: regex
+          pattern: '^[a-z][a-z0-9_]*$'
+        severity: 2
+        tags: ["code_style", "naming"]
+      
+      - name: class_size
+        description: "Limit class size"
+        validator:
+          type: length
+        threshold: 200
+        severity: 4
+        tags: ["code_quality", "maintainability"]
+      
+      - name: test_coverage
+        description: "Ensure minimum test coverage"
+        validator:
+          type: custom
+          module: coverage_validator
+          function: check_coverage
+        threshold: 95
+        severity: 5
+        tags: ["testing", "quality"]
+    
+    security:
+      - name: dependency_check
+        description: "Check for vulnerable dependencies"
+        validator:
+          type: custom
+          module: security_validator
+          function: check_dependencies
+        threshold: "high"
+        severity: 5
+        tags: ["security", "dependencies"]
+    
+    architecture:
+      - name: architectural_layers
+        description: "Enforce architectural boundaries"
+        validator:
+          type: custom
+          module: architecture_validator
+          function: check_dependencies
+        threshold:
+          allowed_dependencies:
+            presentation: ["application"]
+            application: ["domain"]
+            domain: []
+        severity: 5
+        tags: ["architecture", "dependencies"]
+
+# Cascade Configuration (Execution Engine)
+cascade:
+  execution_rules:
+    - name: commit_message_format
+      description: "Enforce commit message format"
+      validator:
+        type: regex
+        pattern: '^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .{1,50}$'
+      severity: 3
+      tags: ["git", "documentation"]
+    
+    - name: api_response_time
+      description: "API response time limit"
+      validator:
+        type: custom
+        module: performance_validator
+        function: check_response_time
+      threshold: 200  # ms
+      severity: 4
+      tags: ["performance", "api"]
+    
+    - name: error_handling
+      description: "Enforce proper error handling"
+      validator:
+        type: regex
+        pattern: 'try:.*?except (?!Exception:).*?:'
+      severity: 4
+      tags: ["code_quality", "error_handling"]
+    
+    - name: logging_standards
+      description: "Enforce logging standards"
+      validator:
+        type: regex
+        pattern: 'logger\.(debug|info|warning|error|critical)\('
+      severity: 3
+      tags: ["logging", "observability"]
+    
+    - name: code_duplication
+      description: "Detect code duplication"
+      validator:
+        type: custom
+        module: duplication_validator
+        function: check_duplication
+      threshold: 10  # percentage
+      severity: 3
+      tags: ["code_quality", "maintainability"]
+  
+  settings:
+    auto_save:
+      enabled: true
+      interval: 180  # 3 minutes
+      max_size: 500000000  # 500MB
+    
+    auto_context:
+      enabled: true
+      depth: 3
+      scan_interval: 30  # 30 seconds
+      max_files: 5000
+
+# Shared Configuration
+shared:
+  priorities:
+    - "Real-world AI interaction"
+    - "Security and validation"
+    - "Enterprise integration"
+    - "Performance and scalability"
+  
+  metrics:
+    code:
+      complexity_max: 5
+      method_lines_max: 20
+      class_lines_max: 200
+      parameters_max: 3
+    
+    testing:
+      coverage_min: 95
+      mutation_score_min: 85
+      performance_threshold_ms: 100
