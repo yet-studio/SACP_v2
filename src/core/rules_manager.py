@@ -307,39 +307,114 @@ class RulesManager:
     def learn_from_history(self, external_history: List[Dict] = None):
         """Apprend et ajuste les règles basé sur l'historique de validation."""
         history = external_history or self.validation_history
-        
         if not history:
             return
         
-        # Analyser les patterns de validation
         rule_stats = {}
+        performance_stats = {}
+        
+        # Collecter les statistiques
         for record in history:
             rule_name = record["rule"]
-            if rule_name not in rule_stats:
-                rule_stats[rule_name] = {"total": 0, "failures": 0}
             
-            rule_stats[rule_name]["total"] += 1
+            # Stats de validation
+            if rule_name not in rule_stats:
+                rule_stats[rule_name] = {
+                    "total": 0,
+                    "failures": 0,
+                    "avg_duration": 0.0,
+                    "severity_sum": 0
+                }
+            
+            stats = rule_stats[rule_name]
+            stats["total"] += 1
             if not record["success"]:
-                rule_stats[rule_name]["failures"] += 1
+                stats["failures"] += 1
+            
+            # Durée moyenne et sévérité
+            if "duration" in record["context"]:
+                duration = record["context"]["duration"]
+                stats["avg_duration"] = (stats["avg_duration"] * (stats["total"] - 1) + duration) / stats["total"]
+            
+            stats["severity_sum"] += record["severity"]
+            
+            # Stats de performance par type
+            rule_type = record["type"]
+            if rule_type not in performance_stats:
+                performance_stats[rule_type] = {
+                    "total_duration": 0.0,
+                    "count": 0,
+                    "cache_hits": 0
+                }
+            
+            if "duration" in record["context"]:
+                performance_stats[rule_type]["total_duration"] += record["context"]["duration"]
+                performance_stats[rule_type]["count"] += 1
+            
+            if record["context"].get("cached", False):
+                performance_stats[rule_type]["cache_hits"] += 1
         
         # Ajuster les règles basé sur les statistiques
         for rule_name, stats in rule_stats.items():
-            if rule_name in self.rules:
-                failure_rate = stats["failures"] / stats["total"]
-                rule = self.rules[rule_name]
+            if rule_name not in self.rules:
+                continue
+            
+            rule = self.rules[rule_name]
+            failure_rate = stats["failures"] / stats["total"]
+            avg_severity = stats["severity_sum"] / stats["total"]
+            
+            # Ajuster le seuil si nécessaire
+            if isinstance(rule.threshold, (int, float)):
+                if failure_rate > 0.3 and failure_rate < 0.7:
+                    # Trop de failures mais pas catastrophique : ajuster légèrement
+                    adjustment = 0.1
+                    if isinstance(rule.threshold, int):
+                        rule.threshold = max(1, int(rule.threshold * (1 + adjustment)))
+                    else:
+                        rule.threshold *= (1 + adjustment)
                 
-                # Ajuster la sévérité basé sur le taux d'échec
-                if failure_rate > 0.7:  # Beaucoup d'échecs
-                    rule.severity = min(5, rule.severity + 1)
-                elif failure_rate < 0.3:  # Peu d'échecs
-                    rule.severity = max(1, rule.severity - 1)
+                elif failure_rate >= 0.7:
+                    # Beaucoup trop de failures : ajustement plus important
+                    adjustment = 0.2
+                    if isinstance(rule.threshold, int):
+                        rule.threshold = max(1, int(rule.threshold * (1 + adjustment)))
+                    else:
+                        rule.threshold *= (1 + adjustment)
                 
-                # Ajuster les seuils si possible
-                if isinstance(rule.threshold, (int, float)):
-                    if failure_rate > 0.7:
-                        rule.threshold *= 1.1  # Plus permissif
-                    elif failure_rate < 0.3:
-                        rule.threshold *= 0.9  # Plus strict
+                elif failure_rate < 0.1 and stats["total"] > 50:
+                    # Très peu de failures et assez de données : on peut être plus strict
+                    adjustment = 0.05
+                    if isinstance(rule.threshold, int):
+                        rule.threshold = max(1, int(rule.threshold * (1 - adjustment)))
+                    else:
+                        rule.threshold *= (1 - adjustment)
+            
+            # Ajuster la sévérité si nécessaire
+            if avg_severity > rule.severity + 1:
+                rule.severity = min(5, rule.severity + 1)
+            elif avg_severity < rule.severity - 1 and stats["total"] > 50:
+                rule.severity = max(1, rule.severity - 1)
+        
+        # Optimiser les caches basé sur les performances
+        for rule_type, stats in performance_stats.items():
+            if stats["count"] > 0:
+                avg_duration = stats["total_duration"] / stats["count"]
+                cache_hit_rate = stats["cache_hits"] / stats["count"]
+                
+                # Optimiser le cache si nécessaire
+                if rule_type in self.cache_manager.caches:
+                    self.cache_manager.optimize_cache_size(rule_type)
+                
+                # Logger les métriques de performance
+                self.monitoring.record_validation(
+                    duration=avg_duration,
+                    success=True,
+                    context={
+                        "type": rule_type,
+                        "cache_hit_rate": cache_hit_rate,
+                        "sample_size": stats["count"]
+                    }
+                )
 
     def get_brain_recommendations(self, content: str, brain: BrainType) -> List[Dict]:
         """Obtient des recommandations spécifiques à un cerveau pour le code donné."""

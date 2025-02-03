@@ -135,11 +135,77 @@ class ValidationCacheManager:
     """Gestionnaire de cache pour différents types de validation."""
     
     def __init__(self):
+        # Optimisation des TTL par type de validation :
+        
+        # Code : Cache court car le code change fréquemment
+        # Taille moyenne car beaucoup de validations de code
         self.caches = {
-            'pattern': ValidationCache(maxsize=500, ttl=timedelta(minutes=60)),
-            'security': ValidationCache(maxsize=200, ttl=timedelta(minutes=15)),
-            'documentation': ValidationCache(maxsize=300, ttl=timedelta(hours=2))
+            'code': ValidationCache(
+                maxsize=1000,
+                ttl=timedelta(minutes=15)
+            ),
+            
+            # Architecture : Cache long car les patterns changent peu
+            # Petite taille car moins de validations
+            'architecture': ValidationCache(
+                maxsize=200,
+                ttl=timedelta(hours=4)
+            ),
+            
+            # Documentation : Cache moyen car la doc est mise à jour périodiquement
+            # Taille moyenne
+            'documentation': ValidationCache(
+                maxsize=500,
+                ttl=timedelta(hours=1)
+            ),
+            
+            # Sécurité : Cache court car critique
+            # Grande taille car beaucoup de patterns à vérifier
+            'security': ValidationCache(
+                maxsize=2000,
+                ttl=timedelta(minutes=30)
+            ),
+            
+            # Performance : Cache moyen car les métriques sont relativement stables
+            # Taille moyenne
+            'performance': ValidationCache(
+                maxsize=500,
+                ttl=timedelta(hours=1)
+            )
         }
+        
+        # Métriques d'efficacité du cache
+        self.efficiency_thresholds = {
+            'hit_rate_min': 0.7,  # 70% minimum de hit rate
+            'eviction_rate_max': 0.1,  # 10% maximum d'évictions
+            'size_threshold': 0.8  # Alerte à 80% de remplissage
+        }
+
+    def optimize_cache_size(self, cache_type: str) -> None:
+        """Optimise la taille du cache basé sur les métriques."""
+        cache = self.caches[cache_type]
+        metrics = cache.get_metrics()
+        
+        current_size = metrics['size']
+        max_size = cache.maxsize
+        hit_rate = metrics['hit_rate']
+        eviction_rate = metrics['evictions'] / (metrics['hits'] + metrics['misses'])
+        
+        # Ajuster la taille si nécessaire
+        if hit_rate < self.efficiency_thresholds['hit_rate_min']:
+            # Augmenter la taille si trop de miss
+            new_size = int(max_size * 1.2)  # +20%
+            cache.maxsize = min(new_size, max_size * 2)
+        
+        elif eviction_rate > self.efficiency_thresholds['eviction_rate_max']:
+            # Augmenter la taille si trop d'évictions
+            new_size = int(max_size * 1.5)  # +50%
+            cache.maxsize = min(new_size, max_size * 2)
+        
+        elif current_size < max_size * 0.3:
+            # Réduire la taille si sous-utilisé
+            new_size = int(max_size * 0.8)  # -20%
+            cache.maxsize = max(new_size, 100)
 
     def get_cache(self, cache_type: str) -> ValidationCache:
         """Récupère un cache spécifique."""
