@@ -6,6 +6,9 @@ from dataclasses import dataclass
 from enum import Enum
 import re
 import yaml
+import time
+from .cache_manager import ValidationCacheManager
+from .monitoring import MonitoringSystem, AlertSeverity
 
 class RuleType(Enum):
     CODE = "code"
@@ -37,6 +40,8 @@ class RulesManager:
         self.config_path = config_path
         self.metrics: Dict[str, Any] = {}
         self.validation_history: List[Dict] = []
+        self.cache_manager = ValidationCacheManager()
+        self.monitoring = MonitoringSystem()
         self._load_default_rules()
         if config_path:
             self._load_custom_rules(config_path)
@@ -187,39 +192,117 @@ class RulesManager:
             raise ValueError(f"Rule {rule_name} not found")
         
         rule = self.rules[rule_name]
+        context = context or {}
+        
+        # Vérifier le cache
+        cache_key = f"{rule_name}:{hash(content)}"
+        cache = self.cache_manager.get_cache(rule.type.value)
+        cached_result = cache.get(cache_key)
+        
+        if cached_result is not None:
+            self.monitoring.record_validation(
+                duration=0,
+                success=cached_result["success"],
+                context={**context, "cached": True}
+            )
+            return cached_result
         
         # Ajuster la sévérité basée sur le contexte
         effective_severity = rule.severity
-        if context:
-            if context.get("environment") == "production":
-                effective_severity += 1
-            if context.get("critical"):
-                effective_severity += 1
+        if context.get("environment") == "production":
+            effective_severity += 1
+        if context.get("critical"):
+            effective_severity += 1
         
         # Valider avec la règle
+        start_time = time.time()
         try:
             result = rule.validator(content, rule.threshold)
-            passed = bool(result)
+            success = bool(result)
+            
+            validation_result = {
+                "success": success,
+                "rule": rule_name,
+                "type": rule.type.value,
+                "severity": effective_severity,
+                "context": context,
+                "timestamp": time.time()
+            }
+            
+            # Enregistrer dans le cache
+            cache.set(cache_key, validation_result)
+            
+            # Enregistrer les métriques
+            duration = time.time() - start_time
+            self.monitoring.record_validation(
+                duration=duration,
+                success=success,
+                context={**context, "cached": False}
+            )
+            
+            # Gérer les alertes si nécessaire
+            if not success and effective_severity >= 4:
+                self.monitoring.alerts.trigger_alert(
+                    severity=AlertSeverity.ERROR if effective_severity == 4 else AlertSeverity.CRITICAL,
+                    message=f"Validation failed for {rule_name}",
+                    context={
+                        "rule": rule_name,
+                        "type": rule.type.value,
+                        "severity": effective_severity,
+                        **context
+                    }
+                )
+            
+            # Mettre à jour l'historique
+            self.validation_history.append(validation_result)
+            
+            return validation_result
+            
         except Exception as e:
-            passed = False
-            result = str(e)
-        
-        # Enregistrer l'historique
-        validation_record = {
-            "code": content,
-            "rule": rule_name,
-            "passed": passed,
-            "severity": effective_severity,
-            "context": context
-        }
-        self.validation_history.append(validation_record)
-        
+            error_context = {
+                "rule": rule_name,
+                "type": rule.type.value,
+                "error": str(e),
+                **context
+            }
+            
+            self.monitoring.alerts.trigger_alert(
+                severity=AlertSeverity.ERROR,
+                message=f"Validation error in {rule_name}: {str(e)}",
+                context=error_context
+            )
+            
+            duration = time.time() - start_time
+            self.monitoring.record_validation(
+                duration=duration,
+                success=False,
+                context=error_context
+            )
+            
+            raise
+
+    def get_metrics(self) -> Dict[str, Any]:
+        """Récupère toutes les métriques du système."""
         return {
-            "passed": passed,
-            "description": rule.description,
-            "severity": effective_severity,
-            "result": result
+            "validation": self.monitoring.get_health_status(),
+            "cache": self.cache_manager.get_all_metrics(),
+            "rules": {
+                "total": len(self.rules),
+                "by_type": {
+                    rule_type.value: len(self.get_rules_by_type(rule_type))
+                    for rule_type in RuleType
+                },
+                "by_brain": {
+                    brain_type.value: len(self.get_rules_by_brain(brain_type))
+                    for brain_type in BrainType
+                }
+            }
         }
+
+    def export_metrics(self, metrics_dir: str) -> None:
+        """Exporte toutes les métriques."""
+        self.monitoring.export_metrics()
+        self.cache_manager.export_metrics(f"{metrics_dir}/cache_metrics.json")
 
     def learn_from_history(self, external_history: List[Dict] = None):
         """Apprend et ajuste les règles basé sur l'historique de validation."""
@@ -236,7 +319,7 @@ class RulesManager:
                 rule_stats[rule_name] = {"total": 0, "failures": 0}
             
             rule_stats[rule_name]["total"] += 1
-            if not record["passed"]:
+            if not record["success"]:
                 rule_stats[rule_name]["failures"] += 1
         
         # Ajuster les règles basé sur les statistiques
@@ -265,11 +348,11 @@ class RulesManager:
         
         for rule in brain_rules:
             result = self.validate(content, rule.name)
-            if not result["passed"]:
+            if not result["success"]:
                 recommendations.append({
                     "rule": rule.name,
                     "severity": result["severity"],
-                    "description": result["description"],
+                    "description": rule.description,
                     "suggestion": self._get_improvement_suggestion(rule, content)
                 })
         
