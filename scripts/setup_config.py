@@ -3,9 +3,7 @@
 Script to initialize the LLM context configuration.
 Creates llm_context.yaml from llm_context.default.yaml if it doesn't exist.
 """
-import os
 import shutil
-import yaml
 from pathlib import Path
 
 def setup_config():
