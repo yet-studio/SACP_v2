@@ -36,6 +36,7 @@ class RulesManager:
         self.rules: Dict[str, Rule] = {}
         self.config_path = config_path
         self.metrics: Dict[str, Any] = {}
+        self.validation_history: List[Dict] = []
         self._load_default_rules()
         if config_path:
             self._load_custom_rules(config_path)
@@ -180,27 +181,111 @@ class RulesManager:
         """Récupère toutes les règles avec un tag donné"""
         return [rule for rule in self.rules.values() if tag in rule.tags]
 
-    def validate(self, content: str, rule_name: str) -> dict:
-        """Valide du contenu avec une règle spécifique"""
+    def validate(self, content: str, rule_name: str, context: Dict = None) -> Dict:
+        """Valide du contenu avec une règle spécifique et un contexte optionnel."""
         if rule_name not in self.rules:
             raise ValueError(f"Rule {rule_name} not found")
         
         rule = self.rules[rule_name]
+        
+        # Ajuster la sévérité basée sur le contexte
+        effective_severity = rule.severity
+        if context:
+            if context.get("environment") == "production":
+                effective_severity += 1
+            if context.get("critical"):
+                effective_severity += 1
+        
+        # Valider avec la règle
         try:
-            passed = rule.validator(content, rule.threshold)
-            return {
-                "passed": passed,
-                "rule": rule_name,
-                "severity": rule.severity,
-                "description": rule.description
-            }
+            result = rule.validator(content, rule.threshold)
+            passed = bool(result)
         except Exception as e:
-            return {
-                "passed": False,
-                "rule": rule_name,
-                "severity": rule.severity,
-                "description": f"Validation error: {str(e)}"
-            }
+            passed = False
+            result = str(e)
+        
+        # Enregistrer l'historique
+        validation_record = {
+            "code": content,
+            "rule": rule_name,
+            "passed": passed,
+            "severity": effective_severity,
+            "context": context
+        }
+        self.validation_history.append(validation_record)
+        
+        return {
+            "passed": passed,
+            "description": rule.description,
+            "severity": effective_severity,
+            "result": result
+        }
+
+    def learn_from_history(self, external_history: List[Dict] = None):
+        """Apprend et ajuste les règles basé sur l'historique de validation."""
+        history = external_history or self.validation_history
+        
+        if not history:
+            return
+        
+        # Analyser les patterns de validation
+        rule_stats = {}
+        for record in history:
+            rule_name = record["rule"]
+            if rule_name not in rule_stats:
+                rule_stats[rule_name] = {"total": 0, "failures": 0}
+            
+            rule_stats[rule_name]["total"] += 1
+            if not record["passed"]:
+                rule_stats[rule_name]["failures"] += 1
+        
+        # Ajuster les règles basé sur les statistiques
+        for rule_name, stats in rule_stats.items():
+            if rule_name in self.rules:
+                failure_rate = stats["failures"] / stats["total"]
+                rule = self.rules[rule_name]
+                
+                # Ajuster la sévérité basé sur le taux d'échec
+                if failure_rate > 0.7:  # Beaucoup d'échecs
+                    rule.severity = min(5, rule.severity + 1)
+                elif failure_rate < 0.3:  # Peu d'échecs
+                    rule.severity = max(1, rule.severity - 1)
+                
+                # Ajuster les seuils si possible
+                if isinstance(rule.threshold, (int, float)):
+                    if failure_rate > 0.7:
+                        rule.threshold *= 1.1  # Plus permissif
+                    elif failure_rate < 0.3:
+                        rule.threshold *= 0.9  # Plus strict
+
+    def get_brain_recommendations(self, content: str, brain: BrainType) -> List[Dict]:
+        """Obtient des recommandations spécifiques à un cerveau pour le code donné."""
+        recommendations = []
+        brain_rules = self.get_rules_by_brain(brain)
+        
+        for rule in brain_rules:
+            result = self.validate(content, rule.name)
+            if not result["passed"]:
+                recommendations.append({
+                    "rule": rule.name,
+                    "severity": result["severity"],
+                    "description": result["description"],
+                    "suggestion": self._get_improvement_suggestion(rule, content)
+                })
+        
+        return sorted(recommendations, key=lambda x: x["severity"], reverse=True)
+
+    def _get_improvement_suggestion(self, rule: Rule, content: str) -> str:
+        """Génère une suggestion d'amélioration basée sur la règle et le contenu."""
+        if "patterns" in rule.tags:
+            return f"Consider using design patterns like {', '.join(rule.threshold['patterns'])}"
+        elif "complexity" in rule.tags:
+            return "Consider breaking down the code into smaller, more manageable functions"
+        elif "documentation" in rule.tags:
+            return "Add comprehensive documentation including examples and return types"
+        elif "security" in rule.tags:
+            return "Review security implications and consider using parameterized queries"
+        return "Review and refactor according to best practices"
 
     def _check_complexity(self, content: str, threshold: int) -> bool:
         """Calcule la complexité cyclomatique"""
