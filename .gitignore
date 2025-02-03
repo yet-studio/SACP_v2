@@ -43,3 +43,4 @@ Thumbs.db
 # Project specific
 examples/output/
 *.log
+config/llm_context.yaml

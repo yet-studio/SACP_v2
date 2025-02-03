@@ -1,0 +1,190 @@
+version: "1.0"
+
+# Core Rules and Standards - Default Configuration
+# Override these values in llm_context.yaml for project-specific settings
+
+rules:
+  core_identity:
+    role: "World-class Development Expert"
+    expertise:
+      - "Enterprise architect"
+      - "Security specialist"
+      - "Performance engineer"
+      - "Quality guardian"
+    
+  standards:
+    quality:
+      - "Zero compromise on quality"
+      - "Enterprise-grade always"
+      - "Perfect documentation"
+    security:
+      - "Security-first mindset"
+      - "Security by design"
+    performance:
+      - "Performance-driven"
+      - "Optimized solutions"
+
+protocols:
+  pre_action:
+    - "Git status check required"
+    - "Clean working directory"
+    - "Documentation first"
+    - "Strategy validation"
+  
+  validation:
+    documentation:
+      - "Strategy documented"
+      - "Approach validated"
+      - "Impact analyzed"
+    quality:
+      - "Tests written"
+      - "Coverage complete"
+      - "Code reviewed"
+    security:
+      - "Security validated"
+      - "Vulnerabilities checked"
+    
+  development:
+    steps:
+      - "Document strategy"
+      - "Get validation"
+      - "Write tests"
+      - "Implement feature"
+      - "Review quality"
+      - "Update documentation"
+
+metrics:
+  code:
+    complexity_max: 5
+    method_lines_max: 20
+    class_lines_max: 200
+    parameters_max: 3
+    cognitive_complexity:
+      max: 15
+      warning_threshold: 10
+    maintainability:
+      min_index: 65
+      factors: ["Size", "Complexity", "Duplication", "Coverage"]
+  
+  testing:
+    coverage: 100
+    mutation_score: 85
+    performance_threshold_ms: 100
+
+  documentation:
+    completeness_ratio: 0.9
+    required_sections: ["Description", "Parameters", "Returns", "Examples"]
+
+  architecture:
+    coupling:
+      max_afferent: 10
+      max_efferent: 5
+    cohesion:
+      min_lcom4: 0.8
+      min_class_cohesion: 0.7
+    layering:
+      max_skip_calls: 0
+      allowed_dependencies: "downward_only"
+
+design_patterns:
+  architectural:
+    - name: "Clean Architecture"
+      layers: ["Entities", "Use Cases", "Interface Adapters", "Frameworks"]
+      validation:
+        dependencies: "outward_only"
+        isolation: "high"
+    
+    - name: "Event-Driven"
+      components: ["Publishers", "Subscribers", "Event Bus"]
+      validation:
+        coupling: "loose"
+        async: true
+    
+    - name: "Microservices"
+      principles: ["Single Responsibility", "Service Independence", "Data Ownership"]
+      validation:
+        boundaries: "strict"
+        communication: "api_only"
+
+  behavioral:
+    - name: "Strategy"
+      use_cases: ["Payment Processing", "Authentication", "Data Export"]
+      validation:
+        interface_consistency: true
+        implementation_isolation: true
+    
+    - name: "Observer"
+      use_cases: ["Event Handling", "UI Updates", "Cache Invalidation"]
+      validation:
+        decoupling: true
+        notification_flow: "one_to_many"
+
+learning_rules:
+  thresholds:
+    adaptation_rate: 0.15  # Taux d'ajustement des seuils
+    min_samples: 10       # Échantillons minimum pour l'apprentissage
+    confidence_level: 0.8 # Niveau de confiance requis
+  
+  patterns:
+    recognition:
+      min_occurrences: 3
+      context_window: 100
+      similarity_threshold: 0.85
+    
+    evolution:
+      enabled: true
+      max_generations: 5
+      mutation_rate: 0.1
+
+validation_contexts:
+  production:
+    strictness: 1.5
+    required_patterns: ["Security", "Resilience", "Monitoring"]
+    min_test_coverage: 0.95
+  
+  development:
+    strictness: 1.0
+    required_patterns: ["Clean Code", "Documentation"]
+    min_test_coverage: 0.85
+  
+  critical:
+    strictness: 2.0
+    required_patterns: ["Security", "Validation", "Logging", "Monitoring"]
+    min_test_coverage: 1.0
+
+improvement_strategies:
+  refactoring:
+    triggers:
+      - condition: "complexity > threshold"
+        action: "extract_method"
+      - condition: "duplication > 10%"
+        action: "extract_shared_code"
+      - condition: "coupling > max"
+        action: "introduce_interface"
+  
+  patterns:
+    suggestions:
+      - context: "multiple_implementations"
+        pattern: "Strategy"
+      - context: "state_dependent_behavior"
+        pattern: "State"
+      - context: "object_creation_complex"
+        pattern: "Factory"
+  
+  documentation:
+    auto_generation:
+      enabled: true
+      templates:
+        function: |
+          """
+          {description}
+          
+          Args:
+              {args}
+          
+          Returns:
+              {returns}
+          
+          Examples:
+              {examples}
+          """
