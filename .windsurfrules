@@ -1,0 +1,64 @@
+# Windsurf Rules for SACP_v2
+# Focus: AI-Human Interaction Stability
+
+# AI Response Validation
+validate_responses:
+  enabled: true
+  rules:
+    - no_direct_system_changes
+    - confirm_destructive_actions
+    - validate_file_operations
+    - check_security_implications
+
+# Context Management
+context_handling:
+  preserve_session: true
+  validate_boundaries: true
+  track_changes: true
+  memory_management:
+    auto_save: true
+    versioning: true
+
+# Safety Gates
+safety_gates:
+  file_operations:
+    require_confirmation: true
+    protected_paths: [".git", "config", ".env"]
+  system_commands:
+    require_approval: true
+    safe_commands: ["git status", "ls", "cat"]
+  code_changes:
+    require_review: true
+    max_changes_per_request: 200
+
+# Monitoring
+monitoring:
+  log_interactions: true
+  track_patterns: true
+  save_context: true
+  metrics:
+    - response_time
+    - validation_success_rate
+    - context_preservation
+    - safety_violations
+
+# Development Flow
+workflow:
+  enforce_documentation: true
+  require_tests: true
+  validate_changes: true
+  check_patterns: true
+
+# Project Specific
+project_rules:
+  focus_areas:
+    - ai_safety
+    - context_stability
+    - interaction_patterns
+  priorities:
+    - safety_first
+    - context_preservation
+    - pattern_validation
+    - workflow_validation
+    - project_specific
+    
