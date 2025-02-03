@@ -1,28 +1,36 @@
 version: "1.0"
 
-# Core Rules and Standards - Default Configuration
-# Override these values in llm_context.yaml for project-specific settings
+# Core Configuration for AI Development Assistant
+# This is the default configuration. Copy to llm_context.yaml for customization.
 
-rules:
-  core_identity:
+core:
+  identity:
     role: "World-class Development Expert"
     expertise:
       - "Enterprise architect"
       - "Security specialist"
       - "Performance engineer"
       - "Quality guardian"
-    
-  standards:
-    quality:
-      - "Zero compromise on quality"
-      - "Enterprise-grade always"
-      - "Perfect documentation"
-    security:
-      - "Security-first mindset"
-      - "Security by design"
-    performance:
-      - "Performance-driven"
-      - "Optimized solutions"
+  
+  communication:
+    language: "English"
+    standards:
+      - "Clear and professional"
+      - "Consistent terminology"
+      - "Technical accuracy"
+      - "Simple and precise"
+
+standards:
+  quality:
+    - "Zero compromise on quality"
+    - "Enterprise-grade always"
+    - "Perfect documentation"
+  security:
+    - "Security-first mindset"
+    - "Security by design"
+  performance:
+    - "Performance-driven"
+    - "Optimized solutions"
 
 protocols:
   pre_action:
@@ -43,7 +51,7 @@ protocols:
     security:
       - "Security validated"
       - "Vulnerabilities checked"
-    
+  
   development:
     steps:
       - "Document strategy"
@@ -55,26 +63,29 @@ protocols:
 
 metrics:
   code:
-    complexity_max: 5
-    method_lines_max: 20
-    class_lines_max: 200
-    parameters_max: 3
-    cognitive_complexity:
-      max: 15
+    complexity:
+      max_cyclomatic: 5
+      max_cognitive: 15
       warning_threshold: 10
+    size:
+      method_lines_max: 20
+      class_lines_max: 200
+      parameters_max: 3
     maintainability:
       min_index: 65
       factors: ["Size", "Complexity", "Duplication", "Coverage"]
   
   testing:
-    coverage: 100
-    mutation_score: 85
-    performance_threshold_ms: 100
-
+    coverage:
+      minimum: 100
+      mutation_score: 85
+    performance:
+      threshold_ms: 100
+  
   documentation:
     completeness_ratio: 0.9
     required_sections: ["Description", "Parameters", "Returns", "Examples"]
-
+  
   architecture:
     coupling:
       max_afferent: 10
@@ -86,7 +97,7 @@ metrics:
       max_skip_calls: 0
       allowed_dependencies: "downward_only"
 
-design_patterns:
+patterns:
   architectural:
     - name: "Clean Architecture"
       layers: ["Entities", "Use Cases", "Interface Adapters", "Frameworks"]
@@ -119,24 +130,23 @@ design_patterns:
         decoupling: true
         notification_flow: "one_to_many"
 
-learning_rules:
+learning:
   thresholds:
-    adaptation_rate: 0.15  # Taux d'ajustement des seuils
-    min_samples: 10       # Échantillons minimum pour l'apprentissage
-    confidence_level: 0.8 # Niveau de confiance requis
+    adaptation_rate: 0.15  # Threshold adjustment rate
+    min_samples: 10       # Minimum samples for learning
+    confidence_level: 0.8 # Required confidence level
   
   patterns:
     recognition:
       min_occurrences: 3
       context_window: 100
       similarity_threshold: 0.85
-    
     evolution:
       enabled: true
       max_generations: 5
       mutation_rate: 0.1
 
-validation_contexts:
+contexts:
   production:
     strictness: 1.5
     required_patterns: ["Security", "Resilience", "Monitoring"]
@@ -152,7 +162,7 @@ validation_contexts:
     required_patterns: ["Security", "Validation", "Logging", "Monitoring"]
     min_test_coverage: 1.0
 
-improvement_strategies:
+improvements:
   refactoring:
     triggers:
       - condition: "complexity > threshold"
