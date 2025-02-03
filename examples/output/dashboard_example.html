@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Métriques de Validation - Example</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px;
+            background-color: #f8f9fa;
+        }
+        .plot { 
+            margin-bottom: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { 
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .summary { 
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .metric { 
+            display: inline-block;
+            margin-right: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            min-width: 150px;
+        }
+        .metric strong {
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .metric span {
+            font-size: 24px;
+            color: #3498db;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.healthy {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .status.warning {
+            background-color: #f1c40f;
+            color: white;
+        }
+        .status.critical {
+            background-color: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard des Métriques de Validation</h1>
+    
+    <div class="summary">
+        <h2>Résumé du Système</h2>
+        <div class="metric">
+            <strong>Status</strong>
+            <span class="status healthy">Healthy</span>
+        </div>
+        <div class="metric">
+            <strong>Alertes Actives</strong>
+            <span>2</span>
+        </div>
+        <div class="metric">
+            <strong>Règles Totales</strong>
+            <span>25</span>
+        </div>
+        <div class="metric">
+            <strong>Cache Hit Rate</strong>
+            <span>85%</span>
+        </div>
+    </div>
+    
+    <div class="plot">
+        <h2>Performance du Cache</h2>
+        <div id="cache_performance"></div>
+    </div>
+    
+    <div class="plot">
+        <h2>Performance des Validations</h2>
+        <div id="validation_performance"></div>
+    </div>
+    
+    <div class="plot">
+        <h2>Analyse des Règles</h2>
+        <div id="rules_analysis"></div>
+    </div>
+    
+    <script>
+        // Données de performance du cache
+        var cacheData = {
+            types: ['Code', 'Security', 'Documentation', 'Architecture', 'Performance'],
+            hitRates: [0.85, 0.92, 0.78, 0.95, 0.88],
+            sizes: [800, 1500, 400, 200, 300],
+            evictions: [20, 5, 15, 2, 8]
+        };
+        
+        // Créer le graphique de performance du cache
+        var cacheTrace1 = {
+            x: cacheData.types,
+            y: cacheData.hitRates,
+            name: 'Hit Rate',
+            type: 'bar',
+            marker: {color: 'rgb(55, 83, 109)'}
+        };
+        
+        var cacheTrace2 = {
+            x: cacheData.types,
+            y: cacheData.sizes,
+            name: 'Taille',
+            type: 'bar',
+            marker: {color: 'rgb(26, 118, 255)'}
+        };
+        
+        var cacheTrace3 = {
+            x: cacheData.types,
+            y: cacheData.evictions,
+            name: 'Évictions',
+            type: 'bar',
+            marker: {color: 'rgb(158, 202, 225)'}
+        };
+        
+        var cacheLayout = {
+            title: 'Performance du Cache par Type',
+            barmode: 'group',
+            showlegend: true
+        };
+        
+        Plotly.newPlot('cache_performance', [cacheTrace1, cacheTrace2, cacheTrace3], cacheLayout);
+        
+        // Données de performance des validations
+        var validationData = {
+            types: ['Code', 'Security', 'Documentation', 'Architecture', 'Performance'],
+            successRates: [0.92, 0.97, 0.85, 0.90, 0.88],
+            durations: [0.15, 0.25, 0.10, 0.20, 0.18]
+        };
+        
+        // Créer le graphique de performance des validations
+        var validationTrace1 = {
+            x: validationData.types,
+            y: validationData.successRates,
+            name: 'Taux de Succès',
+            type: 'bar',
+            marker: {color: 'rgb(67, 147, 195)'}
+        };
+        
+        var validationTrace2 = {
+            x: validationData.types,
+            y: validationData.durations,
+            name: 'Durée (s)',
+            type: 'bar',
+            marker: {color: 'rgb(214, 39, 40)'}
+        };
+        
+        var validationLayout = {
+            title: 'Performance des Validations par Type',
+            barmode: 'group',
+            showlegend: true
+        };
+        
+        Plotly.newPlot('validation_performance', [validationTrace1, validationTrace2], validationLayout);
+        
+        // Données d'analyse des règles
+        var rulesData = {
+            brains: ['LLM', 'Cascade', 'Shared'],
+            counts: [8, 12, 5]
+        };
+        
+        // Créer le graphique d'analyse des règles
+        var rulesTrace = {
+            labels: rulesData.brains,
+            values: rulesData.counts,
+            type: 'pie',
+            marker: {
+                colors: ['rgb(255, 127, 14)', 'rgb(44, 160, 44)', 'rgb(214, 39, 40)']
+            }
+        };
+        
+        var rulesLayout = {
+            title: 'Distribution des Règles par Cerveau'
+        };
+        
+        Plotly.newPlot('rules_analysis', [rulesTrace], rulesLayout);
+    </script>
+</body>
+</html>
